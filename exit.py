@@ -27,8 +27,8 @@ class student_exit:
         driver_path = eval(chromedriver) # 本地的chromedriver绝对路径
         options = webdriver.ChromeOptions()
         # ## 下面两行能让chrome在不弹出的情况下使用
-        # options.add_argument('--headless')
-        # options.add_argument('--disable-gpu')
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
         ## 给seleniuim添加headers
         options.add_argument('User-Agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"')
 
