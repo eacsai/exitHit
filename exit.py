@@ -1,29 +1,34 @@
 import datetime
 from selenium import webdriver
 import time
-
-
+import os
+import yaml
 
 class student_exit:
     def __init__(self):
+        current_path = os.path.abspath(os.path.dirname(__file__))
+        with open(current_path + '/' +'read.yaml', 'r') as f:
+            temp = yaml.load(f.read(),Loader=yaml.FullLoader)
+            self.id = temp['id']  # 输入学号
+            self.sc = temp['sc']  # 输入密码
         self.login_url = "http://ids.hit.edu.cn/authserver/login?service=http%3A%2F%2Fxg.hit.edu.cn%2Fzhxy-xgzs%2Fcommon%2FcasLogin%3Fparams%3DL3hnX21vYmlsZS94c0hvbWU%3D" #hit登陆url
         self.exit_url = "https://xg.hit.edu.cn/zhxy-xgzs/xg_mobile/xsCxsq" #出校申请的url
         self.home_url = "https://xg.hit.edu.cn/zhxy-xgzs/xg_mobile/xsHome" #首页url
         self.registration_url = "http://xg.hit.edu.cn/zhxy-xgzs/xg_mobile/xs/yqxx"  # 上报的url
         self.date = "2028年12月16日"
+        self.chromedriver = temp['chromedriver']
 
-        self.id = '' #输入学号
-        self.sc = '' #输入密码
+
         self.headers = {
             'User-Agent': "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"
         }
 
-    def request_url(self, url1, url2, url3, id, sc, date):   # 通过request_url来获取上报界面
-        driver_path = r"" # 本地的chromedriver绝对路径
+    def request_url(self, chromedriver, url1, url2, url3, id, sc, date):   # 通过request_url来获取上报界面
+        driver_path = eval(chromedriver) # 本地的chromedriver绝对路径
         options = webdriver.ChromeOptions()
         # ## 下面两行能让chrome在不弹出的情况下使用
-        options.add_argument('--headless')
-        options.add_argument('--disable-gpu')
+        # options.add_argument('--headless')
+        # options.add_argument('--disable-gpu')
         ## 给seleniuim添加headers
         options.add_argument('User-Agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36"')
 
@@ -57,13 +62,17 @@ class student_exit:
         driver.find_element_by_xpath('//a[@class="weui-dialog__btn primary"]').click()
 
     def run(self):
-        begin = datetime.date(2020, 1, 3) #输入起始日期
-        end = datetime.date(2021, 1, 10) #输入终止日期
+        a = input("起始日期：")  #输入格式如：2020-12-20
+        b = input("终止日期：")  #输入格式如：2020-12-25
+        a1 = a.split('-',2)
+        b1 = b.split('-',2)
+        begin = datetime.date(int(a1[0]),int(a1[1]),int(a1[2])) #输入起始日期
+        end = datetime.date(int(b1[0]),int(b1[1]),int(b1[2])) #输入终止日期
         d = begin
         delta = datetime.timedelta(days=1)
         while d <= end:
             self.date = d.strftime("%Y" + "年" + "%m" + "月" + "%d" + "日")
-            reg = self.request_url(self.login_url, self.home_url, self.exit_url, self.id, self.sc, self.date)
+            self.request_url(self.chromedriver, self.login_url, self.home_url, self.exit_url, self.id, self.sc, self.date)
             print(d.strftime("%Y" + "年" + "%m" + "月" + "%d" + "日" + "申请成功"))
             d += delta
 

@@ -1,0 +1,3 @@
+id:  #学号
+sc:  #密码
+chromedriver: #chromedriver路径，如：r'/Volumes/code/chromedriver'
