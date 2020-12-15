@@ -3,5 +3,5 @@
 ``` 
 15 16行输入学号密码
 22行输入chromedriver绝对路径
-60 61输入起始和终止日期
+60 61输入起始和终止日期，输入格式：datetime.date(year,month,day)
 ```
